@@ -1,0 +1,23 @@
+﻿@model MVC.Models.EmailTextBox
+@{
+    ViewBag.Title = "Extend";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h2>Enter Email</h2>
+
+        @Html.TextBoxFor(model => model.Email)
+        @Html.ValidationMessageFor(model => model.Email)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Verify" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+
