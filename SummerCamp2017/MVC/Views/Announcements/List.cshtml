@@ -12,13 +12,16 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-<div class="dropdown">
+<div class="dropdown" id="categ-name">
     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
         Categories
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-@{List<string> categList = new List<string>(); }
+@{List<string> categList = new List<string>();
+
+     }
+
 @foreach (var item in Model)
 {
     categList.Add(item.Category.Name);
@@ -26,142 +29,85 @@
 @{var listOfCategories = categList.Distinct(); }
 @foreach (var item in listOfCategories)
 {
-    
-        <li><a href="#" onclick="FilterByCategory(@item)">@item</a></li>
+        <li style="margin-left: 10px">@item</li>
 }
 
     </ul>
 </div>
 
-@*@section JavaScript{
-<script type="text/javascript">
-    function FilterByCategory(category) {
-        $("#ShowAnnouncements").empty();
-        var AnnouncementsTable = $("#ShowAnnouncements");
-        var htmlString = "";
-        htmlString += '<table class="table">' +
-        '<tr>' +
-            '<th>' +
-                '@Html.DisplayNameFor(model => model.Category)' +
-            '</th>' +
-            '<th>' +
-                '@Html.DisplayNameFor(model => model.Title)' +
-            '</th>' +
-            '<th>' +
-                '@Html.DisplayNameFor(model => model.Description)' +
-            '</th>' +
-            '<th></th>' +
-        '</tr>';*@
-        @*@foreach (var item in Model)
-        {
-            if (item.Category.Name == category) {
-                htmlString += '<tr>' +
-                '<td>' +
-                    '@Html.DisplayFor(modelItem => item.Category.Name)' +
-                '</td>' +
-                '<td>' +
-                    '@Html.DisplayFor(modelItem => item.Title)' +
-                '</td>' +
-                '<td>' +
-                    '@Html.DisplayFor(modelItem => item.Description)' +
-                '</td>' +
-                '<td>' +
-                    '@Html.ActionLink("Edit", "VerifyEmail", new { id = item.AnnouncementId }) |' +
-                    '@Html.ActionLink("Details", "Details", new { id = item.AnnouncementId }) |' +
-                    '@Html.ActionLink("Delete", "Delete", new { id = item.AnnouncementId }) |' +
-                    '@Html.ActionLink("Close", "Close", new { id = item.AnnouncementId }) |' +
-                    '@Html.ActionLink("Extend", "Extend", new { id = item.AnnouncementId }) |' +
-                    '@Html.ActionLink("Reviews", "List", "Reviews", new { id = item.AnnouncementId }, null)' +
-                '</td>' +
-            '</tr>';
-            }
-        }
 
-        htmlString += '</table>';
-        AnnouncementsTable.append(htmlString);
-    }
-</script>
-    }*@
-
-
-<div id="ShowAnnouncements">
-    <table class="table">
-        <tr>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Phonenumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PostDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ExpirationDate)
-                </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Closed)
-                </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-
-
-        @foreach (var item in Model)
-        {
+<div>
+    <table class="table"  id="ShowAnnouncements">
+        <thead>
             <tr>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Phonenumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PostDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ExpirationDate)
-                    </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.Name)
-                </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Closed)
-                    </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.AnnouncementId }) |
-                    @Html.ActionLink("Reviews", "List", "Reviews", new { id = item.AnnouncementId }, null) 
-                    <div class="dropdown" style="float: right">
-                        @*<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">*@
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-pencil"></span></a>
-                            
-                            @*<span class="caret"></span>
-                        </button>*@
-                        <ul class="dropdown-menu">
-                            <li><a href="#">@Html.ActionLink("Edit", "VerifyEmail", new { id = item.AnnouncementId })</a></li>
-                            <li><a href="#">@Html.ActionLink("Delete", "Delete", new { id = item.AnnouncementId })</a>
-                            <li><a href="#">@Html.ActionLink("Close", "Close", new { id = item.AnnouncementId })</a>
-                            <li><a href="#">@Html.ActionLink("Extend", "Extend", new { id = item.AnnouncementId })</a>
-                            </ul></div>
-                                
-
-</td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th></th>
             </tr>
-        }
 
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { id = item.AnnouncementId }) |
+                        @Html.ActionLink("Reviews", "List", "Reviews", new { id = item.AnnouncementId }, null)
+                        <div class="dropdown" style="float: right">
+                            @*<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">*@
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-pencil"></span></a>
+
+                            @*<span class="caret"></span>
+                            </button>*@
+                            <ul class="dropdown-menu">
+                                <li><a href="#">@Html.ActionLink("Edit", "VerifyEmail", new { id = item.AnnouncementId })</a></li>
+                                <li><a href="#">@Html.ActionLink("Delete", "Delete", new { id = item.AnnouncementId })</a>
+                                <li><a href="#">@Html.ActionLink("Close", "Close", new { id = item.AnnouncementId })</a>
+                                <li><a href="#">@Html.ActionLink("Extend", "Extend", new { id = item.AnnouncementId })</a>
+                            </ul>
+                        </div>
+
+
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script type="text/javascript">
+    $("#categ-name").on("click", "li", function () {
+        var category = this.innerText;
+        var rows = $('#ShowAnnouncements tbody tr');
+        for (var i = 0; i < rows.length; i++)
+        {
+            var row = rows[i];
+            var columns = $(row).find("td");
+            var col = columns[0];
+            debugger;
+            if (col.innerText == category) {
+                $(row).show();
+            }
+            else {
+                $(row).hide();
+            }
+        }
+    })
+</script>
