@@ -287,7 +287,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Announcements\Create.cshtml" />
     <Content Include="Views\Announcements\Delete.cshtml" />
-    <Content Include="Views\Announcements\Details.cshtml" />
     <Content Include="Views\Announcements\Edit.cshtml" />
     <Content Include="Views\Announcements\List.cshtml" />
     <Content Include="Views\Categories\Create.cshtml" />
@@ -303,6 +302,7 @@
     <Content Include="Views\Announcements\VerifyEmail.cshtml" />
     <Content Include="Views\Announcements\Close.cshtml" />
     <Content Include="Views\Announcements\Extend.cshtml" />
+    <Content Include="Views\Announcements\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -6,10 +6,10 @@
 }
 
 
-<h2>List</h2>
+<h2>Announcements</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Add announcement", "Create")
 </p>
 
 <div class="dropdown" id="categ-name">
@@ -49,6 +49,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Closed)
+                </th>
                 <th></th>
             </tr>
 
@@ -66,7 +69,10 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        @Html.ActionLink("Details", "Details", new { id = item.AnnouncementId }) |
+                        @Html.DisplayFor(modelItem => item.Closed)
+                    </td>
+                    <td>
+                        @*@Html.ActionLink("Details", "Details", new { id = item.AnnouncementId }) |*@
                         @Html.ActionLink("Reviews", "List", "Reviews", new { id = item.AnnouncementId }, null)
                         <div class="dropdown" style="float: right">
                             @*<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">*@
@@ -111,3 +117,20 @@
         }
     })
 </script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var rows = $('#ShowAnnouncements tbody tr');
+        for (var i = 0; i < rows.length; i++)
+        {
+            var row = rows[i];
+            var columns = $(row).find("td");
+            var col = columns[3];
+            debugger;
+            if ($(col).is(":checked"))
+                $(row).css({'color': 'grey'});
+        }
+    })
+        
+</script>
+ 

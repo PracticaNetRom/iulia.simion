@@ -4,28 +4,27 @@
     ViewBag.Title = "List";
 }
 
-<h2>List</h2>
+<div>
+
+</div>
+@*@Html.Partial("~/Views/Announcements/Details.cshtml", new MVC.Models.Announcement())*@
+@Html.Action("Details", "Announcements", new { id = Model.CurrentAnnouncementId })
+<h2>Reviews</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", new { idAnn = Model.CurrentAnnouncementId }, null)
+    @Html.ActionLink("Add review", "Create", new { idAnn = Model.CurrentAnnouncementId }, null)
 </p>
 <table class="table">
     <tr>
         <th>
-            @*@Html.DisplayNameFor(model => model.Rating)*@
             Rating
         </th>
         <th>
-            @*@Html.DisplayNameFor(model => model.Comment)*@
             Comment
         </th>
         <th>
-            @*@Html.DisplayNameFor(model => model.Username)*@
             Username
         </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.AnnouncementId)
-        </th>*@
         <th></th>
     </tr>
 
@@ -40,17 +39,10 @@
         <td>
             @Html.DisplayFor(modelItem => item.Username)
         </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.AnnouncementId)
-        </td>*@
         <td>
             @Html.ActionLink("Edit", "Edit", new { idAnn=Model.CurrentAnnouncementId , id=item.ReviewId }) |
             @Html.ActionLink("Details", "Details", new { idAnn = Model.CurrentAnnouncementId, id = item.ReviewId }) |
             @Html.ActionLink("Delete", "Delete", new { idAnn = Model.CurrentAnnouncementId, id = item.ReviewId })
-            @*@{HttpCookie cookie = new HttpCookie("CurrentAnnouncement");
-                cookie.Value = item.AnnouncementId.ToString();
-                Response.Cookies.Add(cookie);
-            }*@
         </td>
     </tr>
 }

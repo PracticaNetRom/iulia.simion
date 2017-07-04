@@ -1,14 +1,11 @@
 ﻿@model MVC.Models.Announcement
 
-@{
-    ViewBag.Title = "Details";
+@{ 
+    Layout = null;
 }
-
-<h2>Details</h2>
-
 <div>
-    <h4>Announcement</h4>
-    <hr />
+    @*<h4>Announcement</h4>*@
+    @*<hr />*@
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Phonenumber)
@@ -43,11 +40,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CategoryId)
+            @Html.DisplayNameFor(model => model.Category)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CategoryId)
+            @Html.DisplayFor(model => model.Category.Name)
         </dd>
 
         <dt>
