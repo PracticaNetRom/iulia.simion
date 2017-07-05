@@ -13,6 +13,5 @@ namespace MVC.Models
         public string Username { get; set; }
         public int AnnouncementId { get; set; }
 
-        public virtual Announcement Announcement { get; set; }
     }
 }

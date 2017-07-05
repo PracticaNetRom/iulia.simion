@@ -108,10 +108,14 @@ namespace WebAPI.Controllers
         {
             //using (SummerCampDBEntities db = new SummerCampDBEntities())
             //{
-                Announcement announcement = db.Announcements.Find(id);
+            Announcement announcement = db.Announcements.Find(id);
 
-                announcement.Closed = true;
-                db.SaveChanges();
+            if (announcement.Closed)
+            {
+                return BadRequest();
+            }
+            announcement.Closed = true;
+            db.SaveChanges();
             //}
 
             return Ok();

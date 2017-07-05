@@ -7,7 +7,6 @@
 <div>
 
 </div>
-@*@Html.Partial("~/Views/Announcements/Details.cshtml", new MVC.Models.Announcement())*@
 @Html.Action("Details", "Announcements", new { id = Model.CurrentAnnouncementId })
 <h2>Reviews</h2>
 

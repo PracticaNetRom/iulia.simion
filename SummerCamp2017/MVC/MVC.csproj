@@ -214,7 +214,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Announcement.cs" />
+    <Compile Include="Models\AnnouncementCreateModel.cs" />
+    <Compile Include="Models\AnnouncementDetailsModel.cs" />
+    <Compile Include="Models\AnnouncementEditModel.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\EmailTextBox.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -224,6 +226,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestClient\RestClient.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Models\AnnouncementListModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MVC.Models.Announcement>
+﻿@model IEnumerable<MVC.Models.AnnouncementListModel>
 
 @{
     ViewBag.Title = "List";
@@ -72,10 +72,8 @@
                         @Html.DisplayFor(modelItem => item.Closed)
                     </td>
                     <td>
-                        @*@Html.ActionLink("Details", "Details", new { id = item.AnnouncementId }) |*@
-                        @Html.ActionLink("Reviews", "List", "Reviews", new { id = item.AnnouncementId }, null)
+                        @Html.ActionLink("See more", "List", "Reviews", new { id = item.AnnouncementId }, null)
                         <div class="dropdown" style="float: right">
-                            @*<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">*@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-pencil"></span></a>
 
                             @*<span class="caret"></span>
@@ -127,8 +125,8 @@
             var columns = $(row).find("td");
             var col = columns[3];
             debugger;
-            if ($(col).is(":checked"))
-                $(row).css({'color': 'grey'});
+            if ($(col).find("input").is(":checked"))
+                $(row).css({'background-color': 'LightGrey'});
         }
     })
         

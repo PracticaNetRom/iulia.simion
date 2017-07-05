@@ -12,37 +12,46 @@ namespace MVC.Controllers
     {
 
 
-        public List<Announcement> GetAnnouncements()
+        public List<AnnouncementListModel> GetAnnouncements()
         {
-            RestClient<Announcement> rc = new RestClient<Announcement>();
+            RestClient<AnnouncementListModel> rc = new RestClient<AnnouncementListModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/announcements/";
-            List<Announcement> announcementsList = rc.Get();
+            List<AnnouncementListModel> announcementsList = rc.Get();
 
             return announcementsList;
         }
 
-        public Announcement GetAnnouncementById(int id)
+        public List<Category> GetCategories()
         {
-            RestClient<Announcement> rc = new RestClient<Announcement>();
+            RestClient<Category> rc = new RestClient<Category>();
+            rc.WebServiceUrl = "http://localhost:61144/api/categories/";
+            List<Category> categoriesList = rc.Get();
+
+            return categoriesList;
+        }
+
+        public AnnouncementDetailsModel GetAnnouncementById(int id)
+        {
+            RestClient<AnnouncementDetailsModel> rc = new RestClient<AnnouncementDetailsModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/announcements/";
-            Announcement announcement = rc.GetById(id);
+            AnnouncementDetailsModel announcement = rc.GetById(id);
 
             return announcement;
         }
 
 
-        public bool PostAnnouncement(Announcement announcement)
+        public bool PostAnnouncement(AnnouncementCreateModel announcement)
         {
-            RestClient<Announcement> rc = new RestClient<Announcement>();
+            RestClient<AnnouncementCreateModel> rc = new RestClient<AnnouncementCreateModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/announcements/";
             bool response = rc.Post(announcement);
 
             return response;
         }
 
-        public bool PutAnnouncement(int id, Announcement announcement)
+        public bool PutAnnouncement(int id, AnnouncementEditModel announcement)
         {
-            RestClient<Announcement> rc = new RestClient<Announcement>();
+            RestClient<AnnouncementEditModel> rc = new RestClient<AnnouncementEditModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/announcements/";
             bool response = rc.Put(id, announcement);
 
@@ -51,7 +60,7 @@ namespace MVC.Controllers
 
         public bool DeleteAnnouncement(int id)
         {
-            RestClient<Announcement> rc = new RestClient<Announcement>();
+            RestClient<AnnouncementDetailsModel> rc = new RestClient<AnnouncementDetailsModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/announcements/";
             bool response = rc.Delete(id);
 
@@ -61,7 +70,7 @@ namespace MVC.Controllers
         public bool CloseAnnouncement(int id)
         {
 
-            RestClient<Announcement> rc = new RestClient<Announcement>();
+            RestClient<AnnouncementDetailsModel> rc = new RestClient<AnnouncementDetailsModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/Announcements/CloseAnnouncement/";
             bool response = rc.Close(id);
 
@@ -71,7 +80,7 @@ namespace MVC.Controllers
         public bool ExtendAnnouncement(int id)
         {
 
-            RestClient<Announcement> rc = new RestClient<Announcement>();
+            RestClient<AnnouncementDetailsModel> rc = new RestClient<AnnouncementDetailsModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/Announcements/ExtendAnnouncement/";
             bool response = rc.Extend(id);
 
@@ -81,11 +90,12 @@ namespace MVC.Controllers
         // GET: Announcements
         public ActionResult Create()
         {
+            ViewBag.Categories = GetCategories();
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create(Announcement announcement)
+        public ActionResult Create(AnnouncementCreateModel announcement)
         {
             PostAnnouncement(announcement);
 
@@ -94,7 +104,7 @@ namespace MVC.Controllers
 
         public ActionResult Delete(int id)
         {
-            Announcement announcement = GetAnnouncementById(id);
+            AnnouncementDetailsModel announcement = GetAnnouncementById(id);
 
             return View(announcement);
         }
@@ -110,7 +120,7 @@ namespace MVC.Controllers
 
         public ActionResult Details(int id)
         {
-            Announcement announcement = GetAnnouncementById(id);
+            AnnouncementDetailsModel announcement = GetAnnouncementById(id);
 
             return View(announcement);
         }
@@ -124,15 +134,23 @@ namespace MVC.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult VerifyEmail(int id, EmailTextBox txtBox)
         {
-            Announcement announcement = GetAnnouncementById(id);
+            AnnouncementDetailsModel announcement = GetAnnouncementById(id);
             if (announcement.Email == txtBox.Email)
             {
-                return RedirectToAction("Edit", new { id = announcement.AnnouncementId });
+                if (!(announcement.Closed))
+                {
+                    return RedirectToAction("Edit", new { id = announcement.AnnouncementId });
+                }
+                else
+                {
+                    ViewBag.Error = "This announcement is closed! Cannot edit!";
+                }
             }
             else
             {
-                return HttpNotFound();
+                ViewBag.Error = "Input data is incorrect!";
             }
+            return View();
         }
 
         public ActionResult Close(int id)
@@ -143,25 +161,26 @@ namespace MVC.Controllers
         [HttpPost]
         public ActionResult Close(int id, EmailTextBox txtBox)
         {
-            Announcement announcement = GetAnnouncementById(id);
-            if (announcement.Email == txtBox.Email)
-            {
-                bool response = CloseAnnouncement(id);
-                if (response)
+                AnnouncementDetailsModel announcement = GetAnnouncementById(id);
+                if (announcement.Email == txtBox.Email)
                 {
-                    return RedirectToAction("List");
+                    bool response = CloseAnnouncement(id);
+                    if (response)
+                    {
+                        return RedirectToAction("List");
+                    }
+                    else
+                    {
+                        ViewBag.Error = "This announcement is already closed!";
+                    }
                 }
+
                 else
                 {
-                    return HttpNotFound();
+                    ViewBag.Error = "Input data is incorrect!";
                 }
-            }
 
-            else
-            {
-                return HttpNotFound();
-            }
-            
+            return View();
         }
 
 
@@ -173,7 +192,7 @@ namespace MVC.Controllers
         [HttpPost]
         public ActionResult Extend(int id, EmailTextBox txtBox)
         {
-            Announcement announcement = GetAnnouncementById(id);
+            AnnouncementDetailsModel announcement = GetAnnouncementById(id);
             if (announcement.Email == txtBox.Email)
             {
                 bool response = ExtendAnnouncement(id);
@@ -183,26 +202,35 @@ namespace MVC.Controllers
                 }
                 else
                 {
-                    return HttpNotFound();
+                    ViewBag.Error = "This announcement is closed! Cannot extend!";
                 }
             }
 
             else
             {
-                return HttpNotFound();
+                ViewBag.Error = "Input data is incorrect!";
             }
+
+            return View();
 
         }
         public ActionResult Edit(int id)
         {
-            Announcement announcement = GetAnnouncementById(id);
-
-            return View(announcement);
+            AnnouncementDetailsModel announcement = GetAnnouncementById(id);
+            AnnouncementEditModel newAnnouncement = new AnnouncementEditModel();
+            newAnnouncement.AnnouncementId = announcement.AnnouncementId;
+            newAnnouncement.Phonenumber = announcement.Phonenumber;
+            newAnnouncement.Email = announcement.Email;
+            newAnnouncement.Title = announcement.Title;
+            newAnnouncement.Description = announcement.Description;
+            newAnnouncement.CategoryId = announcement.CategoryId;
+            ViewBag.Categories = GetCategories();
+            return View(newAnnouncement);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Announcement announcement)
+        public ActionResult Edit(AnnouncementEditModel announcement)
         {
             PutAnnouncement(announcement.AnnouncementId, announcement);
 
@@ -211,7 +239,7 @@ namespace MVC.Controllers
 
         public ActionResult List()
         {
-            List<Announcement> announcementList = GetAnnouncements();
+            List<AnnouncementListModel> announcementList = GetAnnouncements();
 
             return View(announcementList);
         }
