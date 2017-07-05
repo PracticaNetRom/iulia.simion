@@ -4,46 +4,85 @@
     ViewBag.Title = "List";
 }
 
+@section Styles {
+    <link href="~/Content/Reviews.css" rel="stylesheet" type="text/css" />
+}
+
 <div>
 
 </div>
 @Html.Action("Details", "Announcements", new { id = Model.CurrentAnnouncementId })
-<h2>Reviews</h2>
+@Html.Label("Average rating:")
+@Html.DisplayFor(model => model.AverageRating)
+    <h2>Reviews</h2>
 
-<p>
-    @Html.ActionLink("Add review", "Create", new { idAnn = Model.CurrentAnnouncementId }, null)
-</p>
-<table class="table">
-    <tr>
-        <th>
-            Rating
-        </th>
-        <th>
-            Comment
-        </th>
-        <th>
-            Username
-        </th>
-        <th></th>
-    </tr>
+    <p>
+        @Html.ActionLink("Add review", "Create", new { idAnn = Model.CurrentAnnouncementId }, null)
+    </p>
 
-@foreach (var item in Model.Reviews) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Rating)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Comment)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Username)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { idAnn=Model.CurrentAnnouncementId , id=item.ReviewId }) |
-            @Html.ActionLink("Details", "Details", new { idAnn = Model.CurrentAnnouncementId, id = item.ReviewId }) |
-            @Html.ActionLink("Delete", "Delete", new { idAnn = Model.CurrentAnnouncementId, id = item.ReviewId })
-        </td>
-    </tr>
+@foreach (var item in Model.Reviews)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="panel panel-white post panel-shadow">
+                    <div class="post-heading">
+                        <div class="pull-left meta">
+                            <div class="title h5">
+                                <a href="#"><b>@item.Username</b></a>
+                            </div>
+                            <h6 class="text-muted time">@DateTime.Now</h6>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        @for (var i = 0; i < @item.Rating; i++)
+                        {
+                            <p style="display:inline; color: #FFD700">★</p>
+                        }
+                    </div>
+
+                    <div class="post-description">
+                        <p>@item.Comment</p>
+                        
+                    </div>
+                </div>
+            </div>
+         </div>
+       </div>
 }
 
-</table>
+            @*<table class="table">
+                <tr>
+                    <th>
+                        Rating
+                    </th>
+                    <th>
+                        Comment
+                    </th>
+                    <th>
+                        Username
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model.Reviews)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rating)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comment)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Username)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { idAnn = Model.CurrentAnnouncementId, id = item.ReviewId }) |
+                            @Html.ActionLink("Details", "Details", new { idAnn = Model.CurrentAnnouncementId, id = item.ReviewId }) |
+                            @Html.ActionLink("Delete", "Delete", new { idAnn = Model.CurrentAnnouncementId, id = item.ReviewId })
+                        </td>
+                    </tr>
+                }
+
+            </table>*@

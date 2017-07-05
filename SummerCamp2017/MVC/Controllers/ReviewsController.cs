@@ -119,6 +119,20 @@ namespace MVC.Controllers
             List<Review> reviewsList = GetReviewsPerAnnouncement(id);
             revPerAnn.Reviews = reviewsList;
 
+            if (reviewsList.Count == 0)
+            {
+                revPerAnn.AverageRating = 0;
+            }
+            else
+            {
+                revPerAnn.AverageRating = 0;
+                foreach (var review in reviewsList)
+                {
+                    revPerAnn.AverageRating += Convert.ToDecimal(review.Rating);
+                }
+                revPerAnn.AverageRating /= reviewsList.Count();
+            }
+
             return View(revPerAnn);
         }
     }
