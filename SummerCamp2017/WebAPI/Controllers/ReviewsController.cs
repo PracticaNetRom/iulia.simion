@@ -100,6 +100,7 @@ namespace WebAPI.Controllers
 
             //using (SummerCampDBEntities db = new SummerCampDBEntities())
             //{
+                review.DatePosted = DateTime.Now;
                 db.Reviews.Add(review);
                 db.SaveChanges();
             //}

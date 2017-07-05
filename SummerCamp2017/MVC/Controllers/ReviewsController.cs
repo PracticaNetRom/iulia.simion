@@ -70,6 +70,7 @@ namespace MVC.Controllers
         // GET: Announcements
         public ActionResult Create(int idAnn)
         {
+            ViewBag.RatingRange = new int[] {1,2,3,4,5};
             return View();
         }
 

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SummerCampDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SummerCampDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Announcement">
           <Key>
             <PropertyRef Name="AnnouncementId" />
@@ -35,6 +35,7 @@
           <Property Name="Comment" Type="varchar" MaxLength="512" />
           <Property Name="Username" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="AnnouncementId" Type="int" Nullable="false" />
+          <Property Name="DatePosted" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="FK_Announcement_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
@@ -75,34 +76,46 @@
             <End Role="Review" EntitySet="Review" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SummerCampDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SummerCampDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Announcements" EntityType="SummerCampDBModel.Announcement" />
+          <EntitySet Name="Categories" EntityType="SummerCampDBModel.Category" />
+          <EntitySet Name="Reviews" EntityType="SummerCampDBModel.Review" />
+          <AssociationSet Name="FK_Announcement_Category" Association="SummerCampDBModel.FK_Announcement_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Announcement" EntitySet="Announcements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Review_Announcement" Association="SummerCampDBModel.FK_Review_Announcement">
+            <End Role="Announcement" EntitySet="Announcements" />
+            <End Role="Review" EntitySet="Reviews" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Announcement">
           <Key>
             <PropertyRef Name="AnnouncementId" />
           </Key>
           <Property Name="AnnouncementId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Phonenumber" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phonenumber" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="PostDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ExpirationDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
           <Property Name="Closed" Type="Boolean" Nullable="false" />
-          <Property Name="Title" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Category" Relationship="Self.FK_Announcement_Category" FromRole="Announcement" ToRole="Category" />
-          <NavigationProperty Name="Reviews" Relationship="Self.FK_Review_Announcement" FromRole="Announcement" ToRole="Review" />
+          <NavigationProperty Name="Category" Relationship="SummerCampDBModel.FK_Announcement_Category" FromRole="Announcement" ToRole="Category" />
+          <NavigationProperty Name="Reviews" Relationship="SummerCampDBModel.FK_Review_Announcement" FromRole="Announcement" ToRole="Review" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CategoryId" />
           </Key>
           <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Announcements" Relationship="Self.FK_Announcement_Category" FromRole="Category" ToRole="Announcement" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Announcements" Relationship="SummerCampDBModel.FK_Announcement_Category" FromRole="Category" ToRole="Announcement" />
         </EntityType>
         <EntityType Name="Review">
           <Key>
@@ -111,13 +124,14 @@
           <Property Name="ReviewId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Rating" Type="Int32" />
           <Property Name="Comment" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="Username" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="AnnouncementId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Announcement" Relationship="Self.FK_Review_Announcement" FromRole="Review" ToRole="Announcement" />
+          <Property Name="DatePosted" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Announcement" Relationship="SummerCampDBModel.FK_Review_Announcement" FromRole="Review" ToRole="Announcement" />
         </EntityType>
         <Association Name="FK_Announcement_Category">
-          <End Role="Category" Type="Self.Category" Multiplicity="1" />
-          <End Role="Announcement" Type="Self.Announcement" Multiplicity="*" />
+          <End Type="SummerCampDBModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="SummerCampDBModel.Announcement" Role="Announcement" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Category">
               <PropertyRef Name="CategoryId" />
@@ -128,10 +142,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Review_Announcement">
-          <End Role="Announcement" Type="Self.Announcement" Multiplicity="1">
+          <End Type="SummerCampDBModel.Announcement" Role="Announcement" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Review" Type="Self.Review" Multiplicity="*" />
+          <End Type="SummerCampDBModel.Review" Role="Review" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Announcement">
               <PropertyRef Name="AnnouncementId" />
@@ -141,19 +155,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SummerCampDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Announcements" EntityType="Self.Announcement" />
-          <EntitySet Name="Categories" EntityType="Self.Category" />
-          <EntitySet Name="Reviews" EntityType="Self.Review" />
-          <AssociationSet Name="FK_Announcement_Category" Association="Self.FK_Announcement_Category">
-            <End Role="Category" EntitySet="Categories" />
-            <End Role="Announcement" EntitySet="Announcements" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Review_Announcement" Association="Self.FK_Review_Announcement">
-            <End Role="Announcement" EntitySet="Announcements" />
-            <End Role="Review" EntitySet="Reviews" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -163,34 +164,35 @@
           <EntitySetMapping Name="Announcements">
             <EntityTypeMapping TypeName="SummerCampDBModel.Announcement">
               <MappingFragment StoreEntitySet="Announcement">
-                <ScalarProperty Name="AnnouncementId" ColumnName="AnnouncementId" />
-                <ScalarProperty Name="Phonenumber" ColumnName="Phonenumber" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
-                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="Closed" ColumnName="Closed" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Closed" ColumnName="Closed" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phonenumber" ColumnName="Phonenumber" />
+                <ScalarProperty Name="AnnouncementId" ColumnName="AnnouncementId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="SummerCampDBModel.Category">
               <MappingFragment StoreEntitySet="Category">
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Reviews">
             <EntityTypeMapping TypeName="SummerCampDBModel.Review">
               <MappingFragment StoreEntitySet="Review">
-                <ScalarProperty Name="ReviewId" ColumnName="ReviewId" />
-                <ScalarProperty Name="Rating" ColumnName="Rating" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="DatePosted" ColumnName="DatePosted" />
                 <ScalarProperty Name="AnnouncementId" ColumnName="AnnouncementId" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="ReviewId" ColumnName="ReviewId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

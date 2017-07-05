@@ -19,6 +19,7 @@ namespace WebAPI.Models
         public string Comment { get; set; }
         public string Username { get; set; }
         public int AnnouncementId { get; set; }
+        public System.DateTime DatePosted { get; set; }
     
         public virtual Announcement Announcement { get; set; }
     }
