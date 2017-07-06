@@ -40,18 +40,18 @@ namespace MVC.Controllers
             return reviewsList;
         }
 
-        public bool PostReview(Review review)
+        public bool PostReview(ReviewCreateModel review)
         {
-            RestClient<Review> rc = new RestClient<Review>();
+            RestClient<ReviewCreateModel> rc = new RestClient<ReviewCreateModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/reviews/";
             bool response = rc.Post(review);
 
             return response;
         }
 
-        public bool PutReview(int id, Review review)
+        public bool PutReview(int id, ReviewCreateModel review)
         {
-            RestClient<Review> rc = new RestClient<Review>();
+            RestClient<ReviewCreateModel> rc = new RestClient<ReviewCreateModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/reviews/";
             bool response = rc.Put(id, review);
 
@@ -75,12 +75,20 @@ namespace MVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(int idAnn, Review review)
+        public ActionResult Create(int idAnn, ReviewCreateModel review)
         {
             review.AnnouncementId = idAnn;
-            PostReview(review);
-            
-            return RedirectToAction("List", new { id=idAnn });
+            if (review.Comment != null || review.Rating != null)
+            {
+                PostReview(review);
+
+                return RedirectToAction("List", new { id = idAnn });
+            }
+            else
+            {
+                ViewBag.Error = "Please rate or comment!";
+                return View();
+            }
         }
 
         public ActionResult Delete(int idAnn, int id)

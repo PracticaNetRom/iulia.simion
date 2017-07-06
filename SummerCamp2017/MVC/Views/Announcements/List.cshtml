@@ -7,6 +7,16 @@
 
 
 <h2>Announcements</h2>
+<div class="pull-right">
+    <form class="navbar-form navbar-right">
+        <div class="form-group">
+            <input type="text" class="form-control  search" id="search-box" placeholder="Search">
+        </div>
+        <button type="button" class="btn btn-default" onClick="Search()">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+    </form> 
+</div>
 
 <p>
     @Html.ActionLink("Add announcement", "Create")
@@ -130,5 +140,26 @@
         }
     })
         
+</script>
+
+<script type="text/javascript">
+    function Search() {
+        var title = $('#search-box').val();
+        var rows = $('#ShowAnnouncements tbody tr');
+        for (var i = 0; i < rows.length; i++)
+        {
+            var row = rows[i];
+            var columns = $(row).find("td");
+            var col = columns[1];
+            var colText = col.innerText;
+            debugger;
+            if (colText.toLowerCase().indexOf(title) >= 0) {
+                $(row).show();
+            }
+            else {
+                $(row).hide();
+            }
+        }
+    }
 </script>
  
