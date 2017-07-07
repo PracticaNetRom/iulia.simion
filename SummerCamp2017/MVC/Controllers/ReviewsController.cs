@@ -86,6 +86,7 @@ namespace MVC.Controllers
             }
             else
             {
+                ViewBag.RatingRange = new int[] { 1, 2, 3, 4, 5 };
                 ViewBag.Error = "Please rate or comment!";
                 return View();
             }

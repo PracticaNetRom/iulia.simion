@@ -13,11 +13,11 @@
 </div>
 @Html.Action("Details", "Announcements", new { id = Model.CurrentAnnouncementId })
 @Html.Label("Average rating:")
-@Html.DisplayFor(model => model.AverageRating)
+@Html.DisplayFor(model => model.AverageRating)<text>/5</text>
     <h2>Reviews</h2>
 
     <p>
-        @Html.ActionLink("Add review", "Create", new { idAnn = Model.CurrentAnnouncementId }, null)
+        <span class="glyphicon glyphicon-plus" style="color:cornflowerblue"></span> @Html.ActionLink("Add review", "Create", new { idAnn = Model.CurrentAnnouncementId }, null)
     </p>
 
 @foreach (var item in Model.Reviews)

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using RestClient;
+using System.Net.Http;
 
 namespace MVC.Controllers
 {
@@ -67,22 +68,22 @@ namespace MVC.Controllers
             return response;
         }
 
-        public bool CloseAnnouncement(int id)
+        public HttpResponseMessage CloseAnnouncement(int id, string email)
         {
 
             RestClient<AnnouncementDetailsModel> rc = new RestClient<AnnouncementDetailsModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/Announcements/CloseAnnouncement/";
-            bool response = rc.Close(id);
+            HttpResponseMessage response = rc.Close(id,email);
 
             return response;
         }
 
-        public bool ExtendAnnouncement(int id)
+        public HttpResponseMessage ExtendAnnouncement(int id, string email)
         {
 
             RestClient<AnnouncementDetailsModel> rc = new RestClient<AnnouncementDetailsModel>();
             rc.WebServiceUrl = "http://localhost:61144/api/Announcements/ExtendAnnouncement/";
-            bool response = rc.Extend(id);
+            HttpResponseMessage response = rc.Extend(id,email);
 
             return response;
         }
@@ -161,24 +162,25 @@ namespace MVC.Controllers
         [HttpPost]
         public ActionResult Close(int id, EmailTextBox txtBox)
         {
-                AnnouncementDetailsModel announcement = GetAnnouncementById(id);
-                if (announcement.Email == txtBox.Email)
-                {
-                    bool response = CloseAnnouncement(id);
-                    if (response)
+                //AnnouncementDetailsModel announcement = GetAnnouncementById(id);
+                //if (announcement.Email == txtBox.Email)
+                //{
+                HttpResponseMessage response = CloseAnnouncement(id, txtBox.Email);
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         return RedirectToAction("List");
                     }
-                    else
+                    else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                    {
+                        ViewBag.Error = "Input data is incorrect!";
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                     {
                         ViewBag.Error = "This announcement is already closed!";
                     }
-                }
+                //}
 
-                else
-                {
-                    ViewBag.Error = "Input data is incorrect!";
-                }
+                
 
             return View();
         }
@@ -192,24 +194,23 @@ namespace MVC.Controllers
         [HttpPost]
         public ActionResult Extend(int id, EmailTextBox txtBox)
         {
-            AnnouncementDetailsModel announcement = GetAnnouncementById(id);
-            if (announcement.Email == txtBox.Email)
-            {
-                bool response = ExtendAnnouncement(id);
-                if (response)
-                {
-                    return RedirectToAction("List");
-                }
-                else
-                {
-                    ViewBag.Error = "This announcement is closed! Cannot extend!";
-                }
-            }
+            //ModelState.AddModelError(txtBox, "Enter email!");
 
-            else
+            HttpResponseMessage response = ExtendAnnouncement(id, txtBox.Email);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                    return RedirectToAction("List");
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
             {
                 ViewBag.Error = "Input data is incorrect!";
+                //ModelState.AddModelError( txtBox.Email, "Input data is incorrect!");
             }
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                    ViewBag.Error = "This announcement is closed! Cannot extend!";
+            }
+            
 
             return View();
 

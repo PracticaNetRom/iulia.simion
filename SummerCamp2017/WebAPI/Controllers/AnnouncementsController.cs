@@ -104,7 +104,7 @@ namespace WebAPI.Controllers
         //[HttpPost]
         [System.Web.Http.AcceptVerbs("GET", "POST")]
         [Route("api/Announcements/CloseAnnouncement/{id}")]
-        public IHttpActionResult CloseAnnouncement(int id)
+        public HttpResponseMessage CloseAnnouncement(int id, [FromBody] string email)
         {
             //using (SummerCampDBEntities db = new SummerCampDBEntities())
             //{
@@ -112,35 +112,59 @@ namespace WebAPI.Controllers
 
             if (announcement.Closed)
             {
-                return BadRequest();
+                HttpResponseMessage response1 = Request.CreateResponse(HttpStatusCode.BadRequest);
+                return response1;
             }
-            announcement.Closed = true;
-            db.SaveChanges();
+            if (announcement.Email == email)
+            {
+                announcement.Closed = true;
+                db.SaveChanges();
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
+                return response;
+            }
+            else
+            {
+                HttpResponseMessage response2 = Request.CreateResponse(HttpStatusCode.Forbidden);
+                return response2;
+            }
             //}
-
-            return Ok();
+           
         }
 
         //POST: api/Announcements/ExtendAnnouncement/5
         [System.Web.Http.AcceptVerbs("GET", "POST")]
         [HttpPost]
         [Route("api/Announcements/ExtendAnnouncement/{id}")]
-        public IHttpActionResult ExtendAnnouncement(int id)
+        public HttpResponseMessage ExtendAnnouncement(int id, [FromBody] string email)
         {
             //using (SummerCampDBEntities db = new SummerCampDBEntities())
             //{
                 Announcement announcement = db.Announcements.Find(id);
 
-                if (announcement.Closed)
+            if (announcement.Closed)
+            {
+                HttpResponseMessage response1 = Request.CreateResponse(HttpStatusCode.BadRequest);
+                return response1;
+            }
+            else
+            {
+                if (announcement.Email == email)
                 {
-                    return BadRequest();
+                    announcement.ExpirationDate = announcement.ExpirationDate.AddMonths(1);
+                    db.SaveChanges();
+                    HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
+                    return response;
                 }
+                else
+                {
+                    HttpResponseMessage response2 = Request.CreateResponse(HttpStatusCode.Forbidden);
+                    return response2;
+                }
+            }
 
-                announcement.ExpirationDate = announcement.ExpirationDate.AddMonths(1);
-                db.SaveChanges();
             //}
 
-            return Ok();
+            
         }
 
         // DELETE: api/Announcements/5

@@ -10,6 +10,6 @@ namespace MVC.Models
         public System.DateTime PostDate { get; set; }
         public System.DateTime ExpirationDate { get; set; }
         public bool Closed { get; set; }
-        public virtual Category Category { get; set; }
+        public  Category Category { get; set; }
     }
 }

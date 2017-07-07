@@ -17,6 +17,6 @@ namespace MVC.Models
         [Required]
         public string Title { get; set; }
         public string Description { get; set; }
-        public virtual Category Category { get; set; }
+        public  Category Category { get; set; }
     }
 }

@@ -81,22 +81,26 @@ namespace RestClient
             return response.IsSuccessStatusCode;
         }
 
-        public bool Close(int id)
+        public HttpResponseMessage Close(int id, string email)
         {
             var httpClient = new HttpClient();
+            // var content = new FormUrlEncodedContent(new[] {
+            //    new KeyValuePair<string, string>("", email)
+            //}); 
+            var response = httpClient.PostAsJsonAsync(WebServiceUrl + id, email).Result;
 
-            var response = httpClient.GetAsync(WebServiceUrl + id).Result;
-
-            return response.IsSuccessStatusCode;
+            return response;
         }
 
-        public bool Extend(int id)
+        public HttpResponseMessage Extend(int id, string email)
         {
             var httpClient = new HttpClient();
+            //var content = new FormUrlEncodedContent(new[] {
+            //    new KeyValuePair<string, string>("", email)
+            //}); 
+            var response = httpClient.PostAsJsonAsync(WebServiceUrl + id, email).Result;
 
-            var response = httpClient.GetAsync(WebServiceUrl + id).Result;
-
-            return response.IsSuccessStatusCode;
+            return response;
         }
     }
 }

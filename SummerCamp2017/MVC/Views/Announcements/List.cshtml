@@ -19,7 +19,7 @@
 </div>
 
 <p>
-    @Html.ActionLink("Add announcement", "Create")
+    <span class="glyphicon glyphicon-plus" style="color:cornflowerblue"></span> @Html.ActionLink("Add announcement", "Create")
 </p>
 
 <div class="dropdown" id="categ-name">
@@ -150,10 +150,13 @@
         {
             var row = rows[i];
             var columns = $(row).find("td");
-            var col = columns[1];
-            var colText = col.innerText;
+            var colTitle = columns[1];
+            var colDesc = columns[2];
+            var colTitleText = colTitle.innerText;
+            var colDescText = colDesc.innerText;
+
             debugger;
-            if (colText.toLowerCase().indexOf(title) >= 0) {
+            if (colTitleText.toLowerCase().indexOf(title) >= 0 || colDescText.toLowerCase().indexOf(title) >= 0) {
                 $(row).show();
             }
             else {

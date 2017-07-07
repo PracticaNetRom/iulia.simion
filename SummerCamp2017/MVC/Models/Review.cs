@@ -9,12 +9,7 @@ namespace MVC.Models
     public class Review : ReviewCreateModel
     {
         public int ReviewId { get; set; }
-        //public Nullable<int> Rating { get; set; }
-        //public string Comment { get; set; }
-        //[Required]
-        //public string Username { get; set; }
         public DateTime DatePosted { get; set; }
-        //public int AnnouncementId { get; set; }
 
     }
 }
